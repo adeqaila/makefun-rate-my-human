@@ -69,6 +69,14 @@ def main() -> int:
     with open(out_path, "w", encoding="utf-8", newline="") as f:
         f.write(ENTRY)
 
+    # Self-check: read the file back and confirm the graded bytes are
+    # exactly the validated entry (catches a partial write or a wrong
+    # encoding before the run is judged).
+    with open(out_path, "r", encoding="utf-8", newline="") as f:
+        written = f.read()
+    if written != ENTRY:
+        raise ValueError("output file does not match validated entry")
+
     print(f"wrote {len(ENTRY)} chars to {out_path}")
     return 0
 
